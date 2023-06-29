@@ -33,7 +33,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(sourceFiles: "./target/auth-course-0.0.1-SNAPSHOT.war",)
                             ],
-                            remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
+                            //remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
                         )
                     ]
                 )
