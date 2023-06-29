@@ -18,6 +18,7 @@ pipeline {
                 sh "ls"
                 sh "ls target"
                 stash includes: 'target/auth-course-0.0.1-SNAPSHOT.war', name: 'myStash'
+
             }
         }
 
@@ -47,7 +48,7 @@ pipeline {
         always {
             // Unstash the file(s) from the stash and move them to the artifacts folder
             unstash 'myStash'
-            archiveArtifacts artifacts: 'auth-course-0.0.1-SNAPSHOT.war', fingerprint: true
+            archiveArtifacts artifacts: 'target/auth-course-0.0.1-SNAPSHOT.war', fingerprint: true
         }
     }
 }
