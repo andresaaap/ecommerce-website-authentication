@@ -23,6 +23,7 @@ pipeline {
         stage('SSH transfer') {
             steps([$class: 'BapSshPromotionPublisherPlugin']) {
                 sh "ls"
+                sh "ls target"
                 sshPublisher(
                     continueOnError: false, failOnError: true,
                     publishers: [
