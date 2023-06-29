@@ -35,7 +35,9 @@ pipeline {
                             transfers: [
                                 sshTransfer(sourceFiles: "target/auth-course-0.0.1-SNAPSHOT.war",)
                             ],
-                            remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
+                            // copy the file from target/auth-course-0.0.1-SNAPSHOT.war to /home/ec2-user/docker-tomcat-server/data
+                            execCommand: "cp target/auth-course-0.0.1-SNAPSHOT.war /home/ec2-user/docker-tomcat-server/data"
+
                         )
                     ]
                 )
