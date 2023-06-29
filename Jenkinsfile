@@ -19,7 +19,7 @@ pipeline {
                 sh "ls target"
                 sh "mv target/auth-course-0.0.1-SNAPSHOT.war target/ROOT.war"
 
-                stash includes: 'target/auth-course-0.0.1-SNAPSHOT.war', name: 'myStash'
+                stash includes: 'target/ROOT.war', name: 'myStash'
 
             }
         }
