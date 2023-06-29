@@ -16,6 +16,7 @@ pipeline {
                 // build the maven project
                 sh 'mvn clean install'
                 sh "ls"
+                sh "ls target"
             }
         }
 
