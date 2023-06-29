@@ -20,5 +20,23 @@ pipeline {
             }
         }
 
+        stage('SSH transfer') {
+            steps([$class: 'BapSshPromotionPublisherPlugin']) {
+                sshPublisher(
+                    continueOnError: false, failOnError: true,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "Host2",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(sourceFiles: "./target/auth-course-0.0.1-SNAPSHOT.war",)
+                            ],
+                            remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
+                        )
+                    ]
+                )
+            }
+        }
+
     }
 }
