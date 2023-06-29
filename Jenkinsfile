@@ -17,6 +17,7 @@ pipeline {
                 sh 'mvn clean install'
                 sh "ls"
                 sh "ls target"
+                stash includes: './target/auth-course-0.0.1-SNAPSHOT.war', name: 'myStash'
             }
         }
 
@@ -33,12 +34,20 @@ pipeline {
                             transfers: [
                                 sshTransfer(sourceFiles: "./target/auth-course-0.0.1-SNAPSHOT.war",)
                             ],
-                            //remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
+                            remoteDirectory: "/home/ec2-user/docker-tomcat-server/data"
                         )
                     ]
                 )
             }
         }
 
+    }
+
+    post {
+        always {
+            // Unstash the file(s) from the stash and move them to the artifacts folder
+            unstash 'myStash'
+            archiveArtifacts artifacts: 'auth-course-0.0.1-SNAPSHOT.war', fingerprint: true
+        }
     }
 }
