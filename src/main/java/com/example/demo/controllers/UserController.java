@@ -19,9 +19,14 @@ import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+	private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -47,11 +52,21 @@ public class UserController {
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
+		// If password if different from null, then set it to the user's password
+		if (createUserRequest.getPassword() == null) {
+			logger.error("The password was not included, therefore the user {} was not created", createUserRequest.getUsername());
+			// Return a bad request with the message "The password was not included"
+			return ResponseEntity.badRequest().build();
+		}
+
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
 		userRepository.save(user);
+		logger.info("User created successfully: {}", user.getUsername());
+
 		return ResponseEntity.ok(user);
 	}
 	
