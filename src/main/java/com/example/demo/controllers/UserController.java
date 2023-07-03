@@ -59,13 +59,31 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 
-		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+		if(createUserRequest.getPassword().length() < 7){
+			logger.error("The password is too short, therefore the user {} was not created", createUserRequest.getUsername());
+			// Return a bad request with the message "The password is too short"
+			return ResponseEntity.badRequest().build();
+		}
 
+		if(!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
+			logger.error("The password and confirm password do not match, therefore the user {} was not created", createUserRequest.getUsername());
+			// Return a bad request with the message "The password and confirm password do not match"
+			return ResponseEntity.badRequest().build();
+		}
+
+		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		Cart cart = new Cart();
-		cartRepository.save(cart);
-		user.setCart(cart);
-		userRepository.save(user);
-		logger.info("User created successfully: {}", user.getUsername());
+		try {
+			cartRepository.save(cart);
+			user.setCart(cart);
+			userRepository.save(user);
+			logger.info("User created successfully: {}", user.getUsername());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			// Return a server error with the message "There was an error creating the user"
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 
 		return ResponseEntity.ok(user);
 	}
