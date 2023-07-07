@@ -2,12 +2,12 @@ package com.example.demo.controllers;
 
 import java.util.List;
 
+import com.example.demo.model.persistence.User;
+import com.example.demo.model.requests.CreateItemRequest;
+import com.example.demo.model.requests.CreateUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.repositories.ItemRepository;
@@ -35,6 +35,18 @@ public class ItemController {
 		return items == null || items.isEmpty() ? ResponseEntity.notFound().build()
 				: ResponseEntity.ok(items);
 			
+	}
+
+	// create item
+
+	@PostMapping("/create")
+	public ResponseEntity<Item> createItem(@RequestBody CreateItemRequest createItemRequest) {
+		Item item = new Item();
+		item.setName(createItemRequest.getName());
+		item.setDescription(createItemRequest.getDescription());
+		item.setPrice(createItemRequest.getPrice());
+		itemRepository.save(item);
+		return ResponseEntity.ok(item);
 	}
 	
 }
