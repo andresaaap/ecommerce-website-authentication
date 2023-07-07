@@ -78,6 +78,8 @@ public class UserController {
 			user.setCart(cart);
 			userRepository.save(user);
 			logger.info("User created successfully: {}", user.getUsername());
+			//log user password
+			logger.info("User password: {}", user.getPassword());
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
