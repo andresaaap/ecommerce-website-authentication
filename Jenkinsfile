@@ -17,7 +17,6 @@ pipeline {
                 sh 'mvn clean install'
                 sh "ls"
                 sh "ls target"
-                sh "mv target/auth-course-0.0.1-SNAPSHOT.war target/auth-course.war"
 
                 stash includes: 'target/ROOT.war', name: 'myStash'
 
