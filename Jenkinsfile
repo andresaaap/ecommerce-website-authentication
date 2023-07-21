@@ -18,7 +18,7 @@ pipeline {
                 sh "ls"
                 sh "ls target"
 
-                stash includes: 'target/ROOT.war', name: 'myStash'
+                stash includes: 'target/auth-course.war', name: 'myStash'
 
             }
         }
